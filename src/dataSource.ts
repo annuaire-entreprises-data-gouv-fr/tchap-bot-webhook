@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { config } from './config';
 import { Alert } from './modules/alert';
-import { MessageTreatment } from './modules/infraBot';
 import { Habilitation } from './modules/habilitation';
 
 export const dataSource = new DataSource({
@@ -14,7 +13,7 @@ export const dataSource = new DataSource({
     database: config.DATABASE_NAME,
     synchronize: false,
     logging: false,
-    entities: [Alert, MessageTreatment, Habilitation],
+    entities: [Alert, Habilitation],
     migrations: ['dist/migration/*'],
     subscribers: [],
 });

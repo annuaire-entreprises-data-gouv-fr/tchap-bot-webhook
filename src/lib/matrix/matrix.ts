@@ -6,7 +6,7 @@ function buildMatrix() {
     const auth = new MatrixAuth(config.MATRIX_SERVER_URL);
     let client: MatrixClient | null = null;
 
-    return { initialize, sendMessage };
+    return { initialize, sendMessage, sendFormattedMessage };
 
     async function initialize() {
         client = await auth.passwordLogin(config.TCHAP_USERNAME, config.TCHAP_PASSWORD);
@@ -31,6 +31,18 @@ function buildMatrix() {
         return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
             body: message,
             msgtype: 'm.text',
+        });
+    }
+
+    function sendFormattedMessage(text: string, html: string, roomId?: string) {
+        if (!client) {
+            throw new Error(`Client not initialized ; could not send message`);
+        }
+        return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
+            body: text,
+            msgtype: 'm.text',
+            format: 'org.matrix.custom.html',
+            formatted_body: html,
         });
     }
 }

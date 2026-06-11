@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-tchap_bot}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-changeme}
+      POSTGRES_DB: ${DATABASE_NAME:-tchap_bot}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-tchap_bot} -d ${DATABASE_NAME:-tchap_bot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3001}:3001"
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${DATABASE_USER:-tchap_bot}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-changeme}
+      DATABASE_NAME: ${DATABASE_NAME:-tchap_bot}
+      MATRIX_DOMAIN: ${MATRIX_DOMAIN}
+      MATRIX_SERVER_URL: ${MATRIX_SERVER_URL}
+      TCHAP_USERNAME: ${TCHAP_USERNAME}
+      TCHAP_PASSWORD: ${TCHAP_PASSWORD}
+      DEFAULT_ROOM_ID: ${DEFAULT_ROOM_ID}
+      PORT: 3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

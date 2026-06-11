@@ -4,9 +4,6 @@ import { buildRouter } from './router';
 import { config } from './config';
 import { dataSource } from './dataSource';
 import { matrix } from './lib/matrix';
-import { eventEmitter, listenerType } from './lib/events';
-import { buildInfraBotListener } from './modules/infraBot';
-
 async function runApp() {
     try {
         console.log('Connexion à la db...');
@@ -23,12 +20,6 @@ async function runApp() {
         console.log(`Initialisation du client Matrix réussie !`);
     } catch (error) {
         console.error(error);
-    }
-
-    const infraBotListener = buildInfraBotListener(dataSource);
-    const listeners: listenerType[] = [infraBotListener];
-    for (const listener of listeners) {
-        eventEmitter.on(listener.eventName, listener.handler);
     }
 
     const app = Express();

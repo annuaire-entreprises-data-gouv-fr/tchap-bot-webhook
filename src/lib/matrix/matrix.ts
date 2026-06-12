@@ -24,21 +24,21 @@ function buildMatrix() {
         });
     }
 
-    function sendMessage(message: string, roomId?: string) {
+    function sendMessage(message: string, roomId: string) {
         if (!client) {
             throw new Error(`Client not initialized ; could not send message`);
         }
-        return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
+        return client.sendMessage(roomId, {
             body: message,
             msgtype: 'm.text',
         });
     }
 
-    function sendFormattedMessage(text: string, html: string, roomId?: string) {
+    function sendFormattedMessage(text: string, html: string, roomId: string) {
         if (!client) {
             throw new Error(`Client not initialized ; could not send message`);
         }
-        return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
+        return client.sendMessage(roomId, {
             body: text,
             msgtype: 'm.text',
             format: 'org.matrix.custom.html',

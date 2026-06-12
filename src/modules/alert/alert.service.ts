@@ -102,7 +102,6 @@ function buildAlertService(dataSource: DataSource) {
     async function handleUpdownIoWebhookForRoomId(events: updownioEvent[], roomId: string) {
         for (const event of events) {
             const { text, html } = buildUpdownioMessage(event);
-            await matrix.sendFormattedMessage(text, html);
             await matrix.sendFormattedMessage(text, html, roomId);
         }
     }
@@ -117,7 +116,6 @@ function buildAlertService(dataSource: DataSource) {
         for (const event of events) {
             const alert = mappedAlerts[event.check.url];
             const { text, html } = buildUpdownioMessage(event);
-            await matrix.sendFormattedMessage(text, html);
             if (alert) {
                 await matrix.sendFormattedMessage(text, html, alert.roomId);
             }
